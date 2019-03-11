@@ -13,6 +13,7 @@ mean(nchar(alldata$Page_Name))
 filter(alldata,grepl("立法委員 黃偉哲",alldata$Page_Name)==T)%>%count()
 filter(alldata,grepl("高思博 A Po",alldata$Page_Name)==T)%>%count()
 filter(alldata,grepl("林義豐MarkLin",alldata$Page_Name)==T)%>%count()
+filter(alldata,grepl("陳永和",alldata$Page_Name)==T)%>%count()
 
 alldata$Date=as.POSIXct(alldata$Date,format="%Y/%m/%d %H:%M:%S")
 huang=filter(alldata,grepl("立法委員 黃偉哲",alldata$Page_Name)==T)
