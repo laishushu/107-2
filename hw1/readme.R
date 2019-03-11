@@ -1,6 +1,20 @@
 library(readr)
-X201801_data <- read_csv("201901_data.csv")
+library(dplyr)
+X201901_data <- read_csv("201901_data.csv")
 View(X201901_data)
 
 n = nchar(X201901_data$Message)
-k = grep("æŸ¯æ–‡å“²", X201901_data$Page_Name)
+k = grep("¬_¤å­õ", X201901_data$Page_Name)
+h = grep("Áú°ê·ì", X201901_data$Message)
+tours = gregexpr("°ª¶¯", X201901_data$Message)
+han = data.frame(X201901_data$Message == "TRUE")
+n1 = grepl("udn.com Áp¦X·s»Dºô", X201901_data$Page_Name)
+n2 = grep("Ä«ªG¤é³ø ¥xÆW", X201901_data$Page_Name)
+n3 = grep("¦Û¥Ñ®É³ø", X201901_data$Page_Name)
+#n4 = grep("¤¤®É", X201901_data$Page_Name)&|
+
+test=filter(X201901_data,grepl("udn.com Áp¦X·s»Dºô", X201901_data$Page_Name))
+udn_page_count=count(test)
+page_count=X201901_data%>%group_by(Page_Name)%>%count()%>%arrange(desc(n))%>%filter(n>100)
+top3 = merge(page_count,X201901_data,by="Page_Name")
+page_count[1:3,]
