@@ -10,10 +10,14 @@ page_count=X201806_data%>%group_by(Page_Name)%>%count()%>%arrange(desc(n))%>%fil
 
 alldata=rbind(X201806_data,X201807_data,X201808_data)
 mean(nchar(alldata$Page_Name))
-filter(alldata,grepl("立法委員 黃偉哲",alldata$Message)==T)%>%count()
-filter(alldata,grepl("高思博 A Po",alldata$Message)==T)%>%count()
-filter(alldata,grepl("林義豐MarkLin",alldata$Message)==T)%>%count()
+filter(alldata,grepl("立法委員 黃偉哲",alldata$Page_Name)==T)%>%count()
+filter(alldata,grepl("高思博 A Po",alldata$Page_Name)==T)%>%count()
+filter(alldata,grepl("林義豐MarkLin",alldata$Page_Name)==T)%>%count()
 
-a=filter(alldata,grepl("立法委員 黃偉哲",alldata$Page_Name)==T)
 alldata$Date=as.POSIXct(alldata$Date,format="%Y/%m/%d %H:%M:%S")
-plot(a$Date,a$Comment_Count,type = "l")
+huang=filter(alldata,grepl("立法委員 黃偉哲",alldata$Page_Name)==T)
+huang_T=filter(alldata,grepl("立法委員 黃偉哲",alldata$Page_Name)==T&grepl("台南",alldata$Message)==T)%>%count()
+PO=filter(alldata,grepl("高思博 A Po",alldata$Page_Name)==T)
+plot(huang$Date,huang$Comment_Count,type = "l",col="green")
+lines(PO$Date,PO$Comment_Count,type = "l",col="blue")
+
