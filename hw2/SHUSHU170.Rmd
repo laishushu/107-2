@@ -1,0 +1,71 @@
+---
+title: "SHUSHU170"
+author: "SHU"
+date: "2019年3月21日"
+output: html_document
+---
+```{r}
+library(dplyr)
+library(ggplot2)
+library(grid)
+library(corrplot)
+library(ggpubr)
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r data}
+X201801_data <- data.table::fread("201801_data.csv",encoding ="UTF-8",data.table = F )
+X201802_data <- data.table::fread("201802_data.csv",encoding ="UTF-8",data.table = F )
+X201803_data <- data.table::fread("201803_data.csv",encoding ="UTF-8",data.table = F )
+X201804_data <- data.table::fread("201804_data.csv",encoding ="UTF-8",data.table = F )
+X201805_data <- data.table::fread("201805_data.csv",encoding ="UTF-8",data.table = F )
+X201806_data <- data.table::fread("201806_data.csv",encoding ="UTF-8",data.table = F )
+X201807_data <- data.table::fread("201807_data.csv",encoding ="UTF-8",data.table = F )
+X201808_data <- data.table::fread("201808_data.csv",encoding ="UTF-8",data.table = F )
+X201809_data <- data.table::fread("201809_data.csv",encoding ="UTF-8",data.table = F )
+X201810_data <- data.table::fread("201810_data.csv",encoding ="UTF-8",data.table = F )
+```
+
+```{r}
+Q1=rbind(X201801_data,X201802_data,X201803_data,X201804_data,X201805_data)
+mean(nchar(Q1$Page_Name))
+filter(Q1,grepl("立法委員 黃偉哲",Q1$Page_Name)==T)%>%count()
+filter(Q1,grepl("高思博 A Po",Q1$Page_Name)==T)%>%count()
+filter(Q1,grepl("林義豐MarkLin",Q1$Page_Name)==T)%>%count()
+filter(Q1,grepl("陳永和 台南市長候選人",Q1$Page_Name)==T)%>%count()
+
+Q1$Date=as.POSIXct(Q1$Date,format="%Y/%m/%d %H:%M:%S")
+huang=filter(Q1,grepl("立法委員 黃偉哲",Q1$Page_Name)==T)
+PO=filter(Q1,grepl("高思博 A Po",Q1$Page_Name)==T)
+Mark=filter(Q1,grepl("林義豐MarkLin",Q1$Page_Name)==T)
+chen=filter(Q1,grepl("陳永和 台南市長候選人",Q1$Page_Name)==T)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+```{r huang11}
+filter(huang,grepl("photo",huang$Type)==T)%>%count()
+filter(huang,grepl("link",huang$Type)==T)%>%count()
+filter(huang,grepl("status",huang$Type)==T)%>%count()
+ggplot(huang, aes(x=Type)) + geom_bar(fill="lightgreen")+ylab("數量")+ggtitle("黃偉哲2018年1-5月貼文類型")
+ggplot(huang, aes(x=Type, y=LIKE_COUNT)) + geom_boxplot()+ggtitle("黃偉哲貼文類型與按讚分析")
+huang%>%group_by(LIKE_COUNT)%>%filter(LIKE_COUNT>3000)
+```
+```{r omg}
+huang$mes_nchar=nchar(huang$Message)
+PO$mes_nchar=nchar(PO$Message)
+ggscatter(huang,x="All_Reaction_Count",y="LIKE_COUNT",add="reg.line",conf.int = TRUE,cor.coef=TRUE,cor.method="pearson")
+```
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
