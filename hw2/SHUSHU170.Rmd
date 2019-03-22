@@ -61,6 +61,19 @@ ggplot(huang, aes(x=Type)) + geom_bar(fill="lightgreen")+ylab("數量")+ggtitle(
 ggplot(huang, aes(x=Type, y=LIKE_COUNT)) + geom_boxplot()+ggtitle("黃偉哲貼文類型與按讚分析")
 huang%>%group_by(LIKE_COUNT)%>%filter(LIKE_COUNT>3000)
 ```
+
+```{r PO11}
+filter(PO,grepl("photo",PO$Type)==T)%>%count()
+filter(PO,grepl("video",PO$Type)==T)%>%count()
+filter(PO,grepl("link",PO$Type)==T)%>%count()
+filter(PO,grepl("status",PO$Type)==T)%>%count()
+filter(PO,grepl("event",PO$Type)==T)%>%count()
+ggplot(PO,aes(x=Type)) + geom_bar(fill="skyblue")+ylab("數量")+ggtitle("高思博2018年1-5月貼文類型")
+ggplot(PO,aes(x=Type, y=LIKE_COUNT)) + geom_boxplot()+ggtitle("高思博貼文類型與按讚分析")
+PO%>%group_by(LIKE_COUNT)%>%filter(LIKE_COUNT>3000)
+```
+
+
 ```{r omg}
 huang$mes_nchar=nchar(huang$Message)
 PO$mes_nchar=nchar(PO$Message)
